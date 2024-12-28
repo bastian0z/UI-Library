@@ -239,3 +239,5 @@ function BasLibrary:CreateWindow(Settings)
         end
     end)
 end
+
+return BasLibrary
