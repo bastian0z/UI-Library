@@ -244,15 +244,19 @@ function BasLibrary:CreateWindow(Settings)
             WindowSettings.Dragging.OldMousePos = UserInputService:GetMouseLocation()
             WindowSettings.Dragging.OldFramePos = MainFrame.Position
         end
-
-        if Input.KeyCode == Enum.KeyCode[BasLibrary.UIToggle] then
-            ToggleMenu()
-        end
     end)
 
     DragFrame.InputEnded:Connect(function(Input)
         if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
             WindowSettings.Dragging.IsDragging = false
+        end
+    end)
+
+    UserInputService.InputBegan:Connect(function(Input, Typing)
+        if not Typing then
+            if Input.KeyCode == Enum.KeyCode[BasLibrary.Keybinds.UIToggle] then
+                ToggleMenu()
+            end
         end
     end)
 
