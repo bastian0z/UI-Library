@@ -243,7 +243,7 @@ function BasLibrary:CreateWindow(Settings)
             WindowSettings.Dragging.IsDragging = true
             WindowSettings.Dragging.OldMousePos = UserInputService:GetMouseLocation()
             WindowSettings.Dragging.OldFramePos = MainFrame.Position
-        elseif Input == BasLibrary.Keybinds.UIToggle then
+        elseif Input.KeyCode == BasLibrary.Keybinds.UIToggle then
             ToggleMenu()
         end
     end)
