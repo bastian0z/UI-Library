@@ -13,7 +13,7 @@ local BasLibrary = {
     Flags = {},
     Sounds = {},
     Keybinds = {
-        UIToggle = Enum.KeyCode.V
+        UIToggle = "V"
     }
 }
 
@@ -243,7 +243,9 @@ function BasLibrary:CreateWindow(Settings)
             WindowSettings.Dragging.IsDragging = true
             WindowSettings.Dragging.OldMousePos = UserInputService:GetMouseLocation()
             WindowSettings.Dragging.OldFramePos = MainFrame.Position
-        elseif Input.KeyCode == BasLibrary.Keybinds.UIToggle then
+        end
+
+        if Input.KeyCode == Enum.KeyCode[BasLibrary.UIToggle] then
             ToggleMenu()
         end
     end)
