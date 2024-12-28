@@ -206,12 +206,11 @@ function BasLibrary:CreateWindow(Settings)
     CloseImage.Parent = CloseButton
 
     local ToggleMenu = function(Toggled)
-        local IsToggled = Toggled or not WindowSettings.Opened
-        WindowSettings.Opened = IsToggled
-
-        if IsToggled then
+        if Toggled then
+            WindowSettings.Opened = true
             MainFrame.Visible = true
-        elseif IsToggled then
+        elseif Toggled then
+            WindowSettings.Opened = false
             MainFrame.Visible = false
         end
     end
@@ -238,7 +237,7 @@ function BasLibrary:CreateWindow(Settings)
     UserInputService.InputBegan:Connect(function(Input, Typing)
         if not Typing then
             if Input.KeyCode == Enum.KeyCode[BasLibrary.Keybinds.UIToggle] then
-                ToggleMenu()
+                ToggleMenu(not WindowSettings.Opened)
             end
         end
     end)
