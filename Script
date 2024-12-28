@@ -206,30 +206,13 @@ function BasLibrary:CreateWindow(Settings)
     CloseImage.Parent = CloseButton
 
     local ToggleMenu = function(Toggled)
-        if Toggled == false then
-            if WindowSettings.Opened then
-                WindowSettings.Opened = false
-                Tween(MainFrame, {Time = 0.25, Properties = {Size = UDim2.fromScale(0, 0)}})
-                task.wait(0.25)
-                MainFrame.Visible = false
-            end
-        elseif Toggled == true then
-            if not WindowSettings.Opened then
-                WindowSettings.Opened = true
-                Tween(MainFrame, {Time = 0.1, Properties = {Size = UDim2.fromScale(0.307, 0.411)}})
-                MainFrame.Visible = true
-            end
-        else
-            if WindowSettings.Opened then
-                WindowSettings.Opened = false
-                Tween(MainFrame, {Time = 0.25, Properties = {Size = UDim2.fromScale(0, 0)}})
-                task.wait(0.25)
-                MainFrame.Visible = false
-            else
-                WindowSettings.Opened = true
-                Tween(MainFrame, {Time = 0.1, Properties = {Size = UDim2.fromScale(0.307, 0.411)}})
-                MainFrame.Visible = true
-            end
+        Toggled = Toggled or not WindowSettings.Opened
+        WindowSettings.Opened = Toggled
+
+        if Toggled then
+            MainFrame.Visible = true
+        elseif Toggled then
+            MainFrame.Visible = false
         end
     end
 
