@@ -206,12 +206,12 @@ function BasLibrary:CreateWindow(Settings)
     CloseImage.Parent = CloseButton
 
     local ToggleMenu = function(Toggled)
-        Toggled = Toggled or not WindowSettings.Opened
-        WindowSettings.Opened = Toggled
+        local IsToggled = Toggled or not WindowSettings.Opened
+        WindowSettings.Opened = IsToggled
 
-        if Toggled then
+        if IsToggled then
             MainFrame.Visible = true
-        elseif Toggled then
+        elseif IsToggled then
             MainFrame.Visible = false
         end
     end
