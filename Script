@@ -1,1 +1,241 @@
+----- [ Services ] -----
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local CoreGui = game:GetService("CoreGui")
 
+----- [ Variables ] -----
+local LocalPlayer = Players.LocalPlayer
+
+local BasLibrary = {
+    Flags = {},
+    Sounds = {}
+}
+
+----- [ Functions ] -----
+function CreateUICorner(Instance, Info)
+    local UICorner = Instance.new("UICorner")
+    UICorner.CornerRadius = Info.Radius
+    UICorner.Parent = Instance
+end
+
+function CreateUIStroke(Instance, Info)
+    local UIStroke = Instance.new("UIStroke")
+    UIStroke.Color = Info.Color
+    UIStroke.Thickness = Info.Thickness
+    UIStroke.Transparency = Info.Transparency
+    UIStroke.Parent = Instance
+end
+
+function CreateUIAspectRatio(Instance, Info)
+    local UIAspectRatio = Instance.new("UIAspectRatioConstraint")
+    UIAspectRatio.AspectRatio = Info.AspectRatio
+    UIAspectRatio.AspectType = Info.AspectType
+    UIAspectRatio.Parent = Instance
+end
+
+function CreateUIListLayout(Instance, Info)
+    local UIListLayout = Instance.new("UIListLayout")
+    UIListLayout.Padding = Info.Padding
+    UIListLayout.FillDirection = Info.FillDirection
+    UIListLayout.HorizontalAlignment = Info.HorizontalAlignment
+    UIListLayout.VerticalAlignment = Info.VerticalAlignment
+    UIListLayout.Parent = Instance
+end
+
+function AutoScrollSize(Instance)
+    RunService.Heartbeat:Connect(function()
+        local Amount = 0
+	    for _,v in pairs(Instance:GetChildren()) do
+		    if not v:IsA("UIListLayout") then
+			    Amount += v.AbsoluteSize.Y + 8
+		    end
+	    end
+	    Instance.CanvasSize = UDim2.new(0, 0, 0, Amount)
+    end)
+end
+
+function CreateUITextSize(Instance, Info)
+    local UITextSize = Instance.new("UITextSizeConstraint")
+    UITextSize.MaxTextSize = Info.MaxTextSize
+    UITextSize.MinTextSize = Info.MinTextSize
+    UITextSize.Parent = Instance
+end
+
+function CreateSound(Name, Info)
+    local Sound = Instance.new("Sound")
+    Sound.SoundId = Info.SoundId
+    Sound.Volume = Info.Volume
+    Sound.Name = Name
+    BasLibrary.Sounds[Sound] = Sound
+end
+
+function PlaySound(Name)
+    local Sound = table.find(BasLibrary.Sounds, Name)
+    if Sound then
+        Sound:Play()
+    end
+end
+
+function Tween(Instance, Info)
+    TweenService:Create(Instance, TweenInfo.new(Info.Time), Info.Properties):Play()
+end
+
+----- [ Main Code ] -----
+task.spawn(function()
+    CreateSound("Click", {SoundId = "rbxassetid://10066931761", Volume = 1.5})
+    CreateSound("Slider", {SoundId = "rbxassetid://9119713951", Volume = 0.25})
+end)
+
+function BasLibrary:CreateWindow(Settings)
+    local WindowSettings = {
+        Opened = true,
+
+        Dragging = {
+            IsDragging = false,
+            OldMousePos = UDim2.fromOffset(0, 0),
+            OldFramePos = UDim2.fromOffset(0, 0)
+        }
+    }
+
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Name = "ScreenGui"
+    ScreenGui.ResetOnSpawn = false
+    ScreenGui.Parent = CoreGui
+
+    local MainFrame = Instance.new("Frame")
+    MainFrame.AnchorPoint = UDim2.fromScale(0.5, 0.5)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    MainFrame.BackgroundTransparency = 0.35
+    MainFrame.Position = UDim2.fromScale(0.5, 0.5)
+    MainFrame.Size = UDim2.fromScale(0.307, 0.411)
+    MainFrame.ClipsDescendants = true
+    CreateUICorner(MainFrame, {Radius = UDim.new(0.05, 0)})
+    CreateUIStroke(MainFrame, {Color = Color3.fromRGB(10, 10, 10), Thickness = 2.5, Transparency = 0.35})
+    CreateUIAspectRatio(MainFrame, {AspectRatio = 1.418, AspectType = Enum.AspectType.FitWithinMaxSize})
+
+    local TabsFrame = Instance.new("Frame")
+    TabsFrame.BackgroundTransparency = 1
+    TabsFrame.Position = UDim2.fromScale(0.015, 0.161)
+    TabsFrame.Size = UDim2.fromScale(0.267, 0.839)
+    TabsFrame.ClipsDescendants = true
+
+    local TabsScrolling = Instance.new("ScrollingFrame")
+    TabsScrolling.BackgroundTransparency = 1
+    TabsScrolling.Position = UDim2.fromScale(0.037, 0.015)
+    TabsScrolling.Size = UDim2.fromScale(0.922, 0.955)
+    TabsScrolling.CanvasSize = UDim2.fromScale(0, 0)
+    TabsScrolling.ScrollBarThickness = 0
+    TabsScrolling.ScrollingDirection = Enum.ScrollingDirection.Y
+    CreateUIListLayout(TabsScrolling, {Padding = Enum.new(0, 0), FillDirection = Enum.FillDirection.Vertical, HorizontalAlignment = Enum.HorizontalAlignment.Left, VerticalAlignment = Enum.VerticalAlignment.Top})
+    AutoScrollSize(TabsScrolling)
+
+    local FeaturesFrame = Instance.new("Frame")
+    FeaturesFrame.BackgroundTransparency = 1
+    FeaturesFrame.Position = UDim2.fromScale(0.326, 0.161)
+    FeaturesFrame.Size = UDim2.fromScale(0.652, 0.839)
+    FeaturesFrame.ClipsDescendants = true
+
+    local FeaturesScrolling = Instance.new("ScrollingFrame")
+    FeaturesScrolling.BackgroundTransparency = 1
+    FeaturesScrolling.Position = UDim2.fromScale(0.015, 0.015)
+    FeaturesScrolling.Size = UDim2.fromScale(0.97, 0.955)
+    FeaturesScrolling.CanvasSize = UDim2.fromScale(0, 0)
+    FeaturesScrolling.ScrollBarThickness = 0
+    FeaturesScrolling.ScrollingDirection = Enum.ScrollingDirection.Y
+    CreateUIListLayout(FeaturesScrolling, {Padding = Enum.new(0, 0), FillDirection = Enum.FillDirection.Vertical, HorizontalAlignment = Enum.HorizontalAlignment.Left, VerticalAlignment = Enum.VerticalAlignment.Top})
+    AutoScrollSize(FeaturesScrolling)
+
+    local Divider = Instance.new("Frame")
+    Divider.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+    Divider.BackgroundTransparency = 0.85
+    Divider.Position = UDim2.fromScale(0.3, 0.15)
+    Divider.Size = UDim2.fromScale(0.005, 0.825)
+
+    local DragFrame = Instance.new("Frame")
+    DragFrame.BackgroundTransparency = 1
+    DragFrame.Position = UDim2.fromScale(0, 0)
+    DragFrame.Size = UDim2.fromScale(1, 0.12)
+
+    local TitleText = Instance.new("TextLabel")
+    TitleText.BackgroundTransparency = 1
+    TitleText.Position = UDim2.fromScale(0.025, 0.018)
+    TitleText.Size = UDim2.fromScale(0.975, 0.078)
+    TitleText.FontFace.Weight = Enum.FontWeight.SemiBold
+    TitleText.TextXAlignment = Enum.TextXAlignment.Left
+    TitleText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TitleText.TextSize = 22
+    TitleText.Text = Settings.Name
+    CreateUITextSize(TitleText, {MaxTextSize = 22, MinTextSize = 1})
+
+    local CloseButton = Instance.new("Frame")
+    CloseButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    CloseButton.BackgroundTransparency = 0.5
+    CloseButton.Position = UDim2.fromScale(0.93, 0.02)
+    CloseButton.Size = UDim2.fromScale(0.054, 0.076)
+    CreateUICorner(CloseButton, {Radius = UDim.new(0.35, 0)})
+    CreateUIStroke(CloseButton, {Color = Color3.fromRGB(10, 10, 10), Thickness = 2.5, Transparency = 0.65})
+
+    local CloseButton2 = Instance.new("TextButton")
+    CloseButton2.BackgroundTransparency = 1
+    CloseButton2.Position = UDim2.fromScale(0, 0)
+    CloseButton2.Size = UDim2.fromScale(1, 1)
+
+    local CloseImage = Instance.new("ImageLabel")
+    CloseImage.BackgroundTransparency = 1
+    CloseImage.Position = UDim2.fromScale(0, 0)
+    CloseImage.Size = UDim2.fromScale(1, 1)
+    CloseImage.Image = "rbxassetid://92159834117903"
+
+    local ToggleMenu = function(Toggled)
+        if Toggled == false then
+            if WindowSettings.Opened then
+                WindowSettings.Opened = false
+                Tween(MainFrame, {Time = 0.25, Properties = {Size = UDim2.fromScale(0, 0)}})
+            end
+        elseif Toggled == true then
+            if not WindowSettings.Opened then
+                WindowSettings.Opened = true
+                Tween(MainFrame, {Time = 0.1, Properties = {Size = UDim2.fromScale(0.307, 0.411)}})
+            end
+        else
+            if WindowSettings.Opened then
+                WindowSettings.Opened = false
+                Tween(MainFrame, {Time = 0.25, Properties = {Size = UDim2.fromScale(0, 0)}})
+            else
+                WindowSettings.Opened = true
+                Tween(MainFrame, {Time = 0.1, Properties = {Size = UDim2.fromScale(0.307, 0.411)}})
+            end
+        end
+    end
+
+    CloseButton2.MouseButton1Click:Connect(function()
+        ToggleMenu(false)
+        CreateSound("Click")
+    end)
+
+    DragFrame.InputBegan:Connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+            WindowSettings.Dragging.IsDragging = true
+            WindowSettings.Dragging.OldMousePos = UserInputService:GetMouseLocation()
+            WindowSettings.Dragging.OldFramePos = MainFrame.Position
+        end
+    end)
+
+    DragFrame.InputEnded:Connect(function(Input)
+        if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+            WindowSettings.Dragging.IsDragging = false
+        end
+    end)
+
+    RunService.Heartbeat:Connect(function()
+        if WindowSettings.Dragging.IsDragging then
+            local MousePos = UserInputService:GetMouseLocation()
+            local MousePosX = WindowSettings.Dragging.OldMousePos.X - MousePos.X
+            local MousePosY = WindowSettings.Dragging.OldMousePos.Y - MousePos.Y
+            
+            Tween(MainFrame, {Time = 0.1, Properties = {Position = WindowSettings.Dragging.OldFramePos - UDim2.fromOffset(MousePosX, MousePosY)}})
+        end
+    end)
+end
